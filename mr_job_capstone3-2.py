@@ -36,7 +36,7 @@ class MRMostUsedWord(MRJob):
 
         try:
             deptime = int(deptime)
-            flight_date_datetime = datetime.datetime.strptime(flight_date_str, '%Y-%M-%d')
+            flight_date_datetime = datetime.datetime.strptime(flight_date_str, '%Y-%m-%d')
 
             carrier_delay = words[52].replace('"', '')
             weather_delay = words[53].replace('"', '')
