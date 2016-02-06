@@ -1,0 +1,4 @@
+# INSERT WITH VALID VALUES
+AWS_ACCESS_KEY_ID=''
+AWS_SECRET_ACCESS_KEY=''
+DYNAMODB_ENDPOINT_URL='ec2-xx-xx-xx-xx.compute-1.amazonaws.com'
