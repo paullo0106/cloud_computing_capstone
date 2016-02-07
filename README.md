@@ -11,7 +11,7 @@ pip install boto3
 pip install awscli
 ```
 
-* [mrjob]http://github.com/Yelp/mrjob/) as MapReduce framework in Python
+* [mrjob](http://github.com/Yelp/mrjob/) as MapReduce framework in Python
 ```
 pip install mrjob
 ```
