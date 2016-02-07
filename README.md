@@ -11,12 +11,16 @@ pip install boto3
 pip install awscli
 ```
 
-* http://github.com/Yelp/mrjob/
+* [mrjob]http://github.com/Yelp/mrjob/) as MapReduce framework in Python
 ```
 pip install mrjob
 ```
 
-* [Transportation dataset](https://aws.amazon.com/datasets/transportation-databases/)
+* Download [Transportation dataset](https://aws.amazon.com/datasets/transportation-databases/)
+
+* Run **DynamoDB**
+
+* Set up a **Hadoop cluster** (or run in single computer)
 
 ### Example
 
