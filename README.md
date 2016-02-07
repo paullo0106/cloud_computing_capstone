@@ -3,6 +3,30 @@ Placeholder for my scripts in MOOC final project
 
 ![System Architecture](/system_architecture.png?raw=true "")
 
+### Prerequisite
+
+* AWS Python SDK
+```
+pip install boto3
+pip install awscli
+```
+
+* http://github.com/Yelp/mrjob/
+```
+pip install mrjob
+```
+
+* [Transportation dataset](https://aws.amazon.com/datasets/transportation-databases/)
+
+### Example
+
+Execute the python scripts on master NameNode which dispatches MapReduce jobs to its Hadoop cluster,
+the result will be saved in HDFS (and DynamoDB)
+```
+python mr_job_capstone2-1.py -r hadoop hdfs://<namenode address>:/data/orig_dest/*.csv -o hdfs://<namenode address>:/data/q2_1_output/
+python dynamodb-crud/query_table2-1.py <airport name>
+```
+
 ### Data
 
 ```
@@ -27,10 +51,4 @@ Found 22 items
 -rw-r--r--   2 ubuntu supergroup 1356612538 2016-02-05 17:37 /data/orig_dest/Origin_and_Destination_Survey_DB1BCoupon_2003_3.csv
 -rw-r--r--   2 ubuntu supergroup 1356612538 2016-02-05 17:37 /data/orig_dest/Origin_and_Destination_Survey_DB1BCoupon_2003_4.csv
 ...
-```
-
-### Example
-
-```
-python mr_job_capstone3-1.py -r hadoop hdfs://<namenode address>:/data/orig_dest/*.csv -o hdfs://<namenode address>:/data/q3_1_output/
 ```
