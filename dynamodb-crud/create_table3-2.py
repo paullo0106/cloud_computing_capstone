@@ -9,7 +9,7 @@ table = dynamodb.create_table(
     TableName='Group3_2',
     KeySchema=[
         {
-            'AttributeName': 'transition_airport',
+            'AttributeName': 'route',
             'KeyType': 'HASH'  #Partition key
         },
         {
@@ -19,7 +19,7 @@ table = dynamodb.create_table(
     ],
     AttributeDefinitions=[
         {
-            'AttributeName': 'transition_airport',
+            'AttributeName': 'route',
             'AttributeType': 'S'
         },
         {

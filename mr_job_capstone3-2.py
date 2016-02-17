@@ -132,12 +132,13 @@ class MRMostUsedWord(MRJob):
                 response = table.put_item(
                     Item={
                         'delay': decimal.Decimal(delay),
-                        'origin_airport': org,
-                        'transition_airport': transition,
-                        'dest_airport': des,
-                        'origin_carrier ': org_carrier,
+                        'route': '{} {} {}'.format(org, transition, des),
+                        #'origin_airport': org,
+                        #'transition_airport': transition,
+                        #'dest_airport': des,
+                        'origin_carrier': org_carrier,
                         'dest_carrier': dest_carrier,
-                        'depart_date': int(dep_date[0:4]+dep_date[5:7]+dep_date[8:10])  #
+                        'depart_date': int(dep_date[:4]+dep_date[5:7]+dep_date[8:10])
                     }
                 )
             except Exception as e:
