@@ -1,12 +1,13 @@
 
 '''
- MASTER=spark://{MASTER_URL}.compute-1.amazonaws.com:7077 bin/pyspark streaming1-2.py
+usage:
+MASTER=spark://{MASTER_URL}.compute-1.amazonaws.com:7077 bin/pyspark streaming_consumer.py
 '''
 
 from pyspark import SparkContext, SparkConf
 from pyspark.streaming import StreamingContext
 
-TOTAL_FILES = 12
+TOTAL_FILES = 12  # change it in production
 STREAMING_INTERVAL = 8
 
 MASTER_URL = 'ec2-xx-xx-xx-xx.compute-1.amazonaws.com'
