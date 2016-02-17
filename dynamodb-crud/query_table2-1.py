@@ -18,7 +18,7 @@ if __name__ == '__main__':
     		KeyConditionExpression=Key('origin_airport').eq(o)
 	)
 
-	print 'Top 10 destination From {}:'.format(o)
+	print 'Top 10 carriers From {}:'.format(o)
 	for i in response['Items']:
                 print '{} delays {} on average'.format(i['carrier'], round(i['delay'],2))
 
