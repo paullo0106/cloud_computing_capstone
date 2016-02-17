@@ -1,7 +1,19 @@
 # Cloud Computing Capstone
 Placeholder for my scripts in MOOC final project
 
+Hadoop and MapReduce part
+
 ![System Architecture](/system_architecture.png?raw=true "")
+
+Spark part
+
+![Architecture](/Spark_Architecture.png?raw=true "")
+
+![Spark Streaming](/Spark_Streaming.png?raw=true "")
+
+![RDD pipeline 1](/Figure1.png?raw=true "")
+
+![RDD pipeline 2](/Figure2.png?raw=true "")
 
 ### Prerequisite
 
