@@ -30,6 +30,9 @@ def process(time, rdd):
 
                 rdd2 = rdd.coalesce(1)
                 rdd2.saveAsHadoopFile(dir_name, 'org.apache.hadoop.mapred.TextOutputFormat')
+
+                # and then insert RDD to DynamoDB/Cassandra depending on tasks as requested
+                # insertRDDtoDynamoDB()
         else:
                 global empty_count
                 empty_count += 1
