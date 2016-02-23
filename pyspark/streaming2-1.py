@@ -98,19 +98,19 @@ def createContext():
 	rdd2 = rdd.map(lambda x: (x[0], x[8], x[11], x[52], x[53], x[54], x[55], x[56])).map(lambda line: [str(w.replace('"','')) for w in line]).filter(lambda row: row[0] != 'Year' and any(row[3:]))
 	rdd2.pprint()
 
-    # sum up delay fields for each row
+    	# sum up delay fields for each row
 	sum_delay_rdd = rdd2.map(sum_delay)
 	sum_delay_rdd.pprint()
 
-    # sum up delay for each (orig, carrier) pair
+    	# sum up delay for each (orig, carrier) pair
 	combined_rdd = sum_delay_rdd.updateStateByKey(updateFunction)
 	combined_rdd.pprint()
 
-    # calculate avg delay
+    	# calculate avg delay
 	avg_rdd = combined_rdd.transform(lambda rdd: rdd.map(lambda (x, y): (x[0], (y[0]/float(y[1]), x[1]))))
 	avg_rdd.pprint()
 
-    # group by orig and sort the performance of different airlines
+    	# group by orig and sort the performance of different airlines and take top 10
 	avg_rdd_by_airport = avg_rdd.groupByKey()
 	airport_sorted_carrier = avg_rdd_by_airport.mapValues(lambda x: sorted(list(x))[:10])
 	aa = airport_sorted_carrier.flatMapValues(lambda x: x)

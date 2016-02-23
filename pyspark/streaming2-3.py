@@ -99,22 +99,22 @@ def createContext():
 	rdd2 = rdd.map(lambda x: (x[0], x[8], x[11], x[18], x[52], x[53], x[54], x[55], x[56])).map(lambda line: [str(w.replace('"','')) for w in line]).filter(lambda row: row[0] != 'Year' and any(row[4:]))
 	rdd2.pprint()
 
-    # sum up delay fields for each row
+    	# sum up delay fields for each row
 	sum_delay_rdd = rdd2.map(sum_delay)
 	sum_delay_rdd.pprint()
 
-    # sum up delay for each (orig, dest, carrier) pair
+    	# sum up delay for each (orig, dest, carrier) pair
 	combined_rdd = sum_delay_rdd.updateStateByKey(updateFunction)
 	combined_rdd.pprint()
 
-    # calculate avg delay
+    	# calculate avg delay
 	avg_rdd = combined_rdd.transform(lambda rdd: rdd.map(lambda (x, y): ((x[0], x[1]), (y[0]/float(y[1]), x[2]))))
 	avg_rdd.pprint()
 
-    # group by (orig, dest)
+    	# group by (orig, dest)
 	avg_rdd_by_route = avg_rdd.groupByKey()
 
-    # sort by on time performance for each (orig, dest) route
+    	# sort by on time performance for each (orig, dest) route and take top 10
 	route_sorted_carrier = avg_rdd_by_route.mapValues(lambda x: sorted(list(x))[:10])
 	aa = route_sorted_carrier.flatMapValues(lambda x: x)
 
