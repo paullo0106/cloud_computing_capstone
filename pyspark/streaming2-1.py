@@ -47,8 +47,8 @@ def process(time, rdd):
 
 def sum_delay(fields):
 
-    orig = fields[1]
-    carrier = fields[2]
+    orig = fields[2]
+    carrier = fields[1]
 
     carrier_delay = fields[3].replace('"', '')
     weather_delay = fields[4].replace('"', '')
@@ -95,6 +95,7 @@ def createContext():
         # main split-combine-apply logic put here
 	# filter out header and other invalid rows
 	rdd = lines.map(lambda line: line.split(',')).filter(lambda words: len(words) > 56)
+        # extract first field (for filtering header), Carrier, Orig, and delay fields
 	rdd2 = rdd.map(lambda x: (x[0], x[8], x[11], x[52], x[53], x[54], x[55], x[56])).map(lambda line: [str(w.replace('"','')) for w in line]).filter(lambda row: row[0] != 'Year' and any(row[3:]))
 	rdd2.pprint()
 

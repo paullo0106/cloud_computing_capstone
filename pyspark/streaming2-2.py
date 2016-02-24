@@ -1,7 +1,7 @@
 
 '''
 usage:
-MASTER=spark://{MASTER_URL}.compute-1.amazonaws.com:7077 bin/pyspark streaming2-3.py
+MASTER=spark://{MASTER_URL}.compute-1.amazonaws.com:7077 bin/pyspark streaming2-2.py
 '''
 
 from pyspark import SparkContext, SparkConf
@@ -12,15 +12,15 @@ STREAMING_INTERVAL = 8
 TOP_NUM = 10
 
 MASTER_URL = 'ec2-xx-xx-xx-xx.compute-1.amazonaws.com'
-CHECKPOINT_DIR = 'hdfs://{}/user/ubuntu/checkpoint2_3/'.format(MASTER_URL)
-TASK_DIR = 'task2_3'
+CHECKPOINT_DIR = 'hdfs://{}/user/ubuntu/checkpoint2_2/'.format(MASTER_URL)
+TASK_DIR = 'task2_2'
 
 empty_count = 0
 dfstream_num = 0
 
 
 def output_formatter(data):
-        return '{},{}, {},{}'.format(data[0][0], data[0][1], data[1][0], data[1][1])
+        return '{},{},{}'.format(data[0], data[1][0], data[1][1])
 
 
 def process(time, rdd):
@@ -47,15 +47,14 @@ def process(time, rdd):
 
 def sum_delay(fields):
 
-    carrier = fields[1]
-    orig = fields[2]
-    dest = fields[3]
+    orig = fields[1]
+    dest = fields[2]
 
-    carrier_delay = fields[4].replace('"', '')
-    weather_delay = fields[5].replace('"', '')
-    nas_delay = fields[6].replace('"', '')
-    security_delay = fields[7].replace('"', '')
-    late_aircraft_delay = fields[8].replace('"', '')
+    carrier_delay = fields[3].replace('"', '')
+    weather_delay = fields[4].replace('"', '')
+    nas_delay = fields[5].replace('"', '')
+    security_delay = fields[6].replace('"', '')
+    late_aircraft_delay = fields[7].replace('"', '')
 
     #print carrier_delay, weather_delay, nas_delay, security_delay, late_aircraft_delay
     delay_list = [carrier_delay, weather_delay, nas_delay, security_delay, late_aircraft_delay]
@@ -67,7 +66,7 @@ def sum_delay(fields):
 	except:
 		continue
 
-    return (orig, dest, carrier), (total_delay, 1)
+    return (orig, dest), (total_delay, 1)
 
 
 def updateFunction(newValues, curValue):
@@ -96,28 +95,26 @@ def createContext():
         # main split-combine-apply logic put here
 	# filter out header and other invalid rows
 	rdd = lines.map(lambda line: line.split(',')).filter(lambda words: len(words) > 56)
-        # extract first field (for filtering header), Carrier, Orig, Dest, and delay fields
-	rdd2 = rdd.map(lambda x: (x[0], x[8], x[11], x[18], x[52], x[53], x[54], x[55], x[56])).map(lambda line: [str(w.replace('"','')) for w in line]).filter(lambda row: row[0] != 'Year' and any(row[4:]))
+    	# extract first field (for filtering header), Orig, Dest, and delay fields
+	rdd2 = rdd.map(lambda x: (x[0], x[11], x[18], x[52], x[53], x[54], x[55], x[56])).map(lambda line: [str(w.replace('"','')) for w in line]).filter(lambda row: row[0] != 'Year' and any(row[3:]))
 	rdd2.pprint()
 
     	# sum up delay fields for each row
 	sum_delay_rdd = rdd2.map(sum_delay)
 	sum_delay_rdd.pprint()
 
-    	# sum up delay for each (orig, dest, carrier) pair
+    	# sum up delay for each (orig, carrier) pair
 	combined_rdd = sum_delay_rdd.updateStateByKey(updateFunction)
 	combined_rdd.pprint()
 
     	# calculate avg delay
-	avg_rdd = combined_rdd.transform(lambda rdd: rdd.map(lambda (x, y): ((x[0], x[1]), (y[0]/float(y[1]), x[2]))))
+	avg_rdd = combined_rdd.transform(lambda rdd: rdd.map(lambda (x, y): (x[0], (y[0]/float(y[1]), x[1]))))
 	avg_rdd.pprint()
 
-    	# group by (orig, dest)
-	avg_rdd_by_route = avg_rdd.groupByKey()
-
-    	# sort by on time performance for each (orig, dest) route and take top 10
-	route_sorted_carrier = avg_rdd_by_route.mapValues(lambda x: sorted(list(x))[:10])
-	aa = route_sorted_carrier.flatMapValues(lambda x: x)
+    	# group by orig and sort the performance of different airlines and take top 10
+	avg_rdd_by_airport = avg_rdd.groupByKey()
+	airport_sorted_carrier = avg_rdd_by_airport.mapValues(lambda x: sorted(list(x))[:10])
+	aa = airport_sorted_carrier.flatMapValues(lambda x: x)
 
     	aa.pprint()
 	aa.foreachRDD(process)
