@@ -43,6 +43,11 @@ python mr_job_capstone2-1.py -r hadoop hdfs://<namenode address>:/data/orig_dest
 python dynamodb-crud/query_table2-1.py <airport name>
 ```
 
+Demo videos:
+* https://www.youtube.com/watch?v=2_UtJZLKyAk (Task 1)  
+* https://www.youtube.com/watch?v=Aiv9oiZ8B00 (Task 2)
+* https://www.youtube.com/watch?v=qM53BNZ71o8 (Task 2 - detailed version)
+
 ### Data
 
 ```
